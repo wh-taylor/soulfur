@@ -18,7 +18,7 @@ impl EventHandler for Handler {}
 #[tokio::main]
 async fn main() {
     let framework = StandardFramework::new()
-        .configure(|c| c.prefix("do ")) // set the bot's prefix to "do "
+        .configure(|c| c.prefix("pls ")) // set the bot's prefix to "pls "
         .group(&GENERAL_GROUP);
 
     // Read the bot token from the TOKEN file in the project's root
