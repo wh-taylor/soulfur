@@ -1,4 +1,4 @@
-use std::env;
+use std::fs;
 
 use serenity::async_trait;
 use serenity::prelude::*;
@@ -21,10 +21,14 @@ async fn main() {
         .configure(|c| c.prefix("do ")) // set the bot's prefix to "do "
         .group(&GENERAL_GROUP);
 
-    // Login with a bot token from the environment
-    let token = env::var("DISCORD_TOKEN").expect("token");
+    // Read the bot token from the TOKEN file in the project's root
+    let token: String = fs::read_to_string("TOKEN")
+        .expect("Couldn't read TOKEN file")
+        .parse().expect("Couldn't parse TOKEN file");
+
     let intents = GatewayIntents::non_privileged()
         | GatewayIntents::MESSAGE_CONTENT;
+
     let mut client = Client::builder(token, intents)
         .event_handler(Handler)
         .framework(framework)
