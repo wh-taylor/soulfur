@@ -2,12 +2,15 @@ use std::fs;
 
 use serenity::async_trait;
 use serenity::prelude::*;
-use serenity::model::channel::Message;
-use serenity::framework::standard::macros::{command, group};
-use serenity::framework::standard::{StandardFramework, CommandResult};
+use serenity::framework::standard::macros::group;
+use serenity::framework::standard::StandardFramework;
+
+mod commands;
+use crate::commands::scan::*;
+use crate::commands::meta::*;
 
 #[group]
-#[commands(ping)]
+#[commands(ping, scan)]
 struct General;
 
 struct Handler;
@@ -39,10 +42,4 @@ async fn main() {
     if let Err(why) = client.start().await {
         println!("An error occurred while running the client: {:?}", why)
     }
-}
-
-#[command]
-async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
-    msg.reply(ctx, "pong").await?;
-    Ok(())
 }
