@@ -9,6 +9,8 @@ mod commands;
 use crate::commands::scan::*;
 use crate::commands::meta::*;
 
+mod cli;
+
 #[group]
 #[commands(ping, scan)]
 struct General;
@@ -38,8 +40,15 @@ async fn main() {
         .await
         .expect("Error creating client");
 
-    // start listening for events by starting a single shard
-    if let Err(why) = client.start().await {
+    // Start listening for events by starting a single shard
+    let client_future = client.start();
+    // Start listening for REPL events
+    let repl_future = cli::repl();
+
+    // Await both discord client and CLI REPL simultaneously
+    let (client_await, _repl_await) = tokio::join!(client_future, repl_future);
+
+    if let Err(why) = client_await {
         println!("An error occurred while running the client: {:?}", why)
     }
 }
