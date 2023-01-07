@@ -1,21 +1,26 @@
 import discord
 import asyncio
+from discord import app_commands
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix = 'pls ', intents = discord.Intents.all())
+intents = discord.Intents.default()
+client = discord.Client(intents = intents)
+tree = app_commands.CommandTree(client)
 
-class Client(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+@client.event
+async def on_ready():
+    await tree.sync(guild = discord.Object(id = 1061147612494954506))
+    print("hello!!!!")
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print("hello")
+# Slash Commands
+
+@tree.command(name = "ping", description = "Ping the bot", guild = discord.Object(id = 1061147612494954506))
+async def ping(interaction):
+    await interaction.response.send_message("Pong!")
 
 def main():
-    asyncio.run(bot.add_cog(Client(bot)))
     with open('TOKEN', 'r') as token:
-        bot.run(token.read())
+        client.run(token.read())
 
 if __name__ == '__main__': main()
 
