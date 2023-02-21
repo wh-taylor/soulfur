@@ -39,8 +39,6 @@ async def get_messages_by_user_in_channel(user, channel):
 
 # gets all messages in the guild
 async def get_messages_by_user_in_guild(user, guild):
-    await ctx.send("this may take a while...")
-
     msgs = [ ]
     for channel in get_text_channels(guild):
         for msg in await get_messages_by_user_in_channel(user, channel):
@@ -54,7 +52,9 @@ async def todgraph_current_user(ctx):
         await ctx.send("please run this in a guild")
         return
 
-    messages = get_messages_by_user_in_guild(ctx.author, ctx.guild)
+    await ctx.send("this may take a while...")
+    messages = await get_messages_by_user_in_guild(ctx.author, ctx.guild)
+    print("done")
 
     # TODO: generate a graph in which the Y axis is the number of messages,
     # and the X axis is the time of day the messages were sent
