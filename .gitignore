@@ -1,2 +1,3 @@
-/target
 TOKEN
+.mppy
+.mypy_cache
